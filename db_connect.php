@@ -2,7 +2,7 @@
 // ---- LOCAL (XAMPP) settings ----
 $db_host = "localhost";
 $db_user = "root";
-$db_pass = "";
+$db_pass = "mrgrt2040";
 $db_name = "order_tracking";
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
