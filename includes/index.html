@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Online Order Tracking System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-box-seam"></i> Order Tracker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.php">All Orders</a></li>
+        <li class="nav-item"><a class="nav-link" href="place_order.php">Place Order</a></li>
+        <li class="nav-item"><a class="nav-link" href="track.php">Track Order</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1 class="display-4">Online Order Tracking System</h1>
+    <p class="lead">Place orders, manage them, and follow every delivery from pending to delivered, all in one place.</p>
+    <a href="place_order.php" class="btn btn-light btn-lg me-2"><i class="bi bi-cart-check"></i> Place an Order</a>
+    <a href="track.php" class="btn btn-outline-light btn-lg"><i class="bi bi-search"></i> Track an Order</a>
+  </div>
+</section>
+
+<main class="container my-5">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm feature-card">
+        <i class="bi bi-cart-plus"></i>
+        <h5 class="mt-3">Place Orders</h5>
+        <p class="text-muted mb-3">Choose a product, enter your details, and get an order number right away.</p>
+        <a href="place_order.php" class="btn btn-primary">Order Now</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm feature-card">
+        <i class="bi bi-geo-alt"></i>
+        <h5 class="mt-3">Track Deliveries</h5>
+        <p class="text-muted mb-3">Enter your order number to see its progress from Pending to Delivered.</p>
+        <a href="track.php" class="btn btn-primary">Track Order</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm feature-card">
+        <i class="bi bi-list-check"></i>
+        <h5 class="mt-3">Manage Orders</h5>
+        <p class="text-muted mb-3">View, add, edit, search, and delete orders in the admin list.</p>
+        <a href="index.php" class="btn btn-primary">View Orders</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="text-center text-muted py-4 small">
+  Online Order Tracking System &copy; 2026
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
