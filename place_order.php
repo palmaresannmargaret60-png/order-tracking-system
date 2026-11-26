@@ -2,19 +2,13 @@
 require 'db_connect.php';
 require 'includes/functions.php';
 
-// Products customers can order (edit names and prices as you like)
-$products = [
-    'Wireless Mouse'      => 399.50,
-    'Mechanical Keyboard' => 2499.00,
-    'USB-C Hub'           => 1250.50,
-    'Laptop Stand'        => 600.00,
-    'Webcam'              => 1500.00,
-];
+$products = PRODUCTS; // shared price list (includes/functions.php)
 
 $errors = [];
 $data = ['customer_name' => '', 'customer_address' => '', 'product_name' => '', 'quantity' => 1];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     $data['customer_name']    = trim($_POST['customer_name'] ?? '');
     $data['customer_address'] = trim($_POST['customer_address'] ?? '');
     $data['product_name']     = $_POST['product_name'] ?? '';
@@ -28,12 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errors) {
         $total  = $products[$data['product_name']] * $data['quantity'];
         $status = 'Pending';
-        $num    = 'ORD-' . date('Ymd') . '-' . random_int(1000, 9999);
+        $num    = generateOrderNumber($conn);
 
         $stmt = $conn->prepare("INSERT INTO orders (order_number, customer_name, customer_address, product_name, quantity, total_amount, status) VALUES (?,?,?,?,?,?,?)");
         $stmt->bind_param("ssssids", $num, $data['customer_name'], $data['customer_address'],
             $data['product_name'], $data['quantity'], $total, $status);
         $stmt->execute();
+        logStatus($conn, $conn->insert_id, $status, 'Order placed');
 
         header("Location: track.php?order_number=" . urlencode($num));
         exit;
@@ -53,6 +48,7 @@ include 'includes/header.php';
   <?php endif; ?>
 
   <form method="post" class="row g-3">
+    <?= csrf_field() ?>
     <div class="col-md-6">
       <label class="form-label">Your Name</label>
       <input type="text" name="customer_name" class="form-control" value="<?= e($data['customer_name']) ?>" required>

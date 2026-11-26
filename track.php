@@ -9,6 +9,13 @@ if ($number !== '') {
     $stmt->bind_param("s", $number);
     $stmt->execute();
     $order = $stmt->get_result()->fetch_assoc();
+    $history = [];
+    if ($order) {
+        $h = $conn->prepare("SELECT status, remarks, changed_at FROM order_status_history WHERE order_id = ? ORDER BY changed_at DESC, history_id DESC");
+        $h->bind_param("i", $order['order_id']);
+        $h->execute();
+        $history = $h->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 }
 
 $steps = ['Pending', 'Processing', 'Shipped', 'Delivered'];
@@ -43,6 +50,17 @@ include 'includes/header.php';
           <span class="<?= $i <= $current ? 'fw-bold text-success' : 'text-muted' ?>"><?= e($s) ?></span>
         <?php endforeach; ?>
       </div>
+    <?php endif; ?>
+    <?php if ($history): ?>
+      <h6 class="mt-4">Tracking history</h6>
+      <ul class="list-group mb-3">
+        <?php foreach ($history as $h): ?>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><?= statusBadge($h['status']) ?> <?= e($h['remarks']) ?></span>
+            <small class="text-muted"><?= e(date('M d, Y g:i A', strtotime($h['changed_at']))) ?></small>
+          </li>
+        <?php endforeach; ?>
+      </ul>
     <?php endif; ?>
     <hr>
     <p class="mb-0"><strong>Deliver to:</strong> <?= e($order['customer_address']) ?></p>

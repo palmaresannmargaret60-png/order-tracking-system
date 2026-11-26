@@ -1,21 +1,26 @@
 <?php
 require 'db_connect.php';
 require 'includes/functions.php';
+requireAdmin();
 
+$catalog = PRODUCTS;
 $errors = [];
 $order = ['customer_name' => '', 'customer_address' => '', 'product_name' => '',
-          'quantity' => 1, 'total_amount' => '', 'status' => 'Pending'];
+          'quantity' => 1, 'status' => 'Pending'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     $order = collectOrder();
-    $errors = validateOrder($order);
+    $errors = validateOrder($order, $catalog);
     if (!$errors) {
-        $num = 'ORD-' . date('Ymd') . '-' . random_int(1000, 9999);
+        $total = $catalog[$order['product_name']] * $order['quantity'];
+        $num = generateOrderNumber($conn);
         $stmt = $conn->prepare("INSERT INTO orders (order_number, customer_name, customer_address, product_name, quantity, total_amount, status) VALUES (?,?,?,?,?,?,?)");
         $stmt->bind_param("ssssids", $num, $order['customer_name'], $order['customer_address'],
-            $order['product_name'], $order['quantity'], $order['total_amount'], $order['status']);
+            $order['product_name'], $order['quantity'], $total, $order['status']);
         $stmt->execute();
-        header("Location: index.php?msg=added");
+        logStatus($conn, $conn->insert_id, $order['status'], 'Order created by admin');
+        header("Location: admin.php?msg=added");
         exit;
     }
 }
